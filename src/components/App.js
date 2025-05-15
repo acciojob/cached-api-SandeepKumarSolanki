@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import 'regenerator-runtime/runtime';
-
+import '../styles/App.css'; // Add this line to import the CSS
 
 const App = () => {
   const [userId, setUserId] = useState('');
   const [rawData, setRawData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // Effect to fetch data from the API when userId changes
   useEffect(() => {
+    let isMounted = true;
+
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -18,21 +19,29 @@ const App = () => {
 
         const response = await fetch(url);
         const data = await response.json();
-        setRawData(data);
+        if (isMounted) {
+          setRawData(data);
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
-        setRawData([]);
+        if (isMounted) {
+          setRawData([]);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [userId]);
 
-  // Memoized processed data
   const memoizedData = useMemo(() => {
-    // Example transformation: only return titles
     return rawData.map(post => ({
       id: post.id,
       title: post.title,
@@ -40,28 +49,34 @@ const App = () => {
   }, [rawData]);
 
   return (
-    <div style={{ padding: '1rem', fontFamily: 'Arial' }}>
-      <h2>Cached Posts Viewer</h2>
-      <label>
-        Filter by User ID:
+    <div className="app-container">
+      <div className="app-header">
+        <h2>📚 Cached Posts Viewer</h2>
+      </div>
+      <div className="input-group">
+        <label htmlFor="userId">Filter by User ID:</label>
         <input
+          id="userId"
           type="number"
           value={userId}
           onChange={e => setUserId(e.target.value)}
           placeholder="e.g., 1"
-          style={{ marginLeft: '10px' }}
         />
-      </label>
+      </div>
 
-      {loading ? (
-        <p>Loading posts...</p>
-      ) : (
-        <ul>
-          {memoizedData.map(post => (
-            <li key={post.id}>{post.title}</li>
-          ))}
-        </ul>
-      )}
+      <div className="content">
+        {loading ? (
+          <p className="loading">🔄 Loading posts...</p>
+        ) : (
+          <ul className="post-list">
+            {memoizedData.map(post => (
+              <li key={post.id} className="post-item">
+                {post.title}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 };
