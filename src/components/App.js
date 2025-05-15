@@ -70,12 +70,12 @@ const App = () => {
 
       <div className="content">
         {loading ? (
-          <p className="loading">Loading...</p> 
+          <p className="loading">Loading...</p>
         ) : (
           <ul className="post-list">
             {memoizedData.map(post => (
               <li key={post.id} className="post-item">
-                {post.title}
+                <h4>{post.title}</h4>
               </li>
             ))}
           </ul>
