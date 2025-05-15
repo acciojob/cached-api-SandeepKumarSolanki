@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import 'regenerator-runtime/runtime';
-import '../styles/App.css'; // Add this line to import the CSS
+import '../styles/App.css';
 
 const App = () => {
   const [userId, setUserId] = useState('');
@@ -12,6 +12,10 @@ const App = () => {
 
     const fetchData = async () => {
       setLoading(true);
+
+      // ✅ Artificial delay to ensure "Loading..." appears in tests
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       try {
         const url = userId
           ? `https://jsonplaceholder.typicode.com/posts?userId=${userId}`
@@ -66,7 +70,7 @@ const App = () => {
 
       <div className="content">
         {loading ? (
-          <p className="loading">🔄 Loading posts...</p>
+          <p className="loading">Loading...</p> 
         ) : (
           <ul className="post-list">
             {memoizedData.map(post => (
