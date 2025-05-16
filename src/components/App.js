@@ -78,6 +78,7 @@ const App = () => {
               
               <li key={post.id} className="post-item">
                 
+                <h4>{post.title}</h4>
                 <p>{post.title}</p>
               </li>
             ))}
