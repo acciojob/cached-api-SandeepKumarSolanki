@@ -52,6 +52,7 @@ const App = () => {
     }));
   }, [rawData]);
 
+  console.log(memoizedData)
   return (
     <div className="app-container">
       <div className="app-header">
@@ -74,8 +75,10 @@ const App = () => {
         ) : (
           <ul className="post-list">
             {memoizedData.map(post => (
+              
               <li key={post.id} className="post-item">
-                <h4>{post.title}</h4>
+                
+                <p>{post.title}</p>
               </li>
             ))}
           </ul>
