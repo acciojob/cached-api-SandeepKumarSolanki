@@ -17,9 +17,7 @@ const App = () => {
       await new Promise(resolve => setTimeout(resolve, 500));
 
       try {
-        const url = userId
-          ? `https://jsonplaceholder.typicode.com/posts?userId=${userId}`
-          : `https://jsonplaceholder.typicode.com/posts`;
+        const url = 'https://jsonplaceholder.typicode.com/posts'
 
         const response = await fetch(url);
         const data = await response.json();
@@ -49,6 +47,7 @@ const App = () => {
     return rawData.map(post => ({
       id: post.id,
       title: post.title,
+      body: post.body
     }));
   }, [rawData]);
 
@@ -79,7 +78,7 @@ const App = () => {
               <li key={post.id} className="post-item">
                 
                 <h4>{post.title}</h4>
-                <p>{post.title}</p>
+                <p>{post.body}</p>
               </li>
             ))}
           </ul>
